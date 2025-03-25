@@ -15,6 +15,10 @@ export const styles = StyleSheet.create({
     borderColor: "#fff",
   },
   pokemonList: {
-    width: "100%"
-  }
+    marginTop: 20,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+
 });
