@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, ScrollView, ActivityIndicator } from "react-native";
+import { View, ScrollView, ActivityIndicator, Pressable } from "react-native";
 
 import { styles } from "./HomeStyles";
 import { Header } from "../../components/Header/Header";
 import { api } from "../../lib/axios";
 import { Pokemon, PokemonTypes } from "../../models/PokemonModel";
 import CardPokemon from "../../components/CardPokemon/CardPokemon";
+import { useNavigation } from "@react-navigation/native";
 
 export function Home() {
+    const navigation = useNavigation<any>();
+
     const [pokemonList, setPokemonList] = useState<Pokemon[]>([])
     const [isLoading, setIsLoading] = useState(false);
 
@@ -15,6 +18,7 @@ export function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true)
                 setPokemonList([])
                 for (let i = 1; i <= 151; i++) {
                     const response = await api.get(`${i}`)
@@ -57,7 +61,11 @@ export function Home() {
                         <ActivityIndicator size="large" />
                     ) : (
                         pokemonList.map((pokemon, index) => (
-                            <CardPokemon key={index} name={pokemon.name} sprite={pokemon.sprites.front_default} />
+                            <Pressable key={index} onPress={() => {
+                                navigation.navigate("PokemonPage", { pokemon })
+                            }}>
+                                <CardPokemon name={pokemon.name} sprite={pokemon.sprites.front_default} />
+                            </Pressable>
                         ))
                     )
                     }
